@@ -14,13 +14,13 @@ export default function Home() {
       },
       width: 1280,
       height: 720,
-    });
+    })
 
-    camera.start();
+    camera.start()
 
     return () => {
-      camera.stop();
-    };
+      camera.stop()
+    }
   }, [])
 
   return (
@@ -31,7 +31,6 @@ export default function Home() {
           className="w-full h-full object-cover transform -scale-x-100"
           autoPlay
           playsInline
-          // style={{ transform: "scaleX(-1)" }}
         />
       </div>
     </>
