@@ -10,6 +10,7 @@ export default function Home() {
   const [cameraReady, setCameraReady] = useState(false)
 
   useEffect(() => {
+    // if (videoRef.current) { videoRef.current.style.borderColor = "#457B9D" }
     const camera = new Camera(videoRef.current!, {
       onFrame: async () => {
         // Do something with the camera frame here
@@ -52,7 +53,7 @@ export default function Home() {
             playsInline
           />
         </div>
-        <div className="w-full text-xs sm:text-sm text-center p-4 absolute bottom-0 font-mono">being built by <a
+        <div className={`w-full text-xs sm:text-sm text-center px-4 py-8 font-mono ${cameraReady ? "" : "hidden"}`}>being built by <a
           className="font-bold underline hover:no-underline text-[#457B9D]" href="https://arccc.co" target="_blank"
           rel="noopener noreferrer">arko</a>&nbsp;·&nbsp;currently very <span
             className="inline-block transform -rotate-[18deg] font-bold">b</span><span
