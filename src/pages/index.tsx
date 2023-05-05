@@ -36,7 +36,7 @@ export default function Home() {
     <>
       <div className="bg-[#FDFAEA] w-screen h-screen">
         {!cameraReady && (
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-full h-full flex items-center justify-center">
             <div className="flex items-end">
               <p className="text-black text-lg font-medium">Setting up the camera</p>
               <ReactLoading type="bubbles" color="black" height={22} width={24} />
