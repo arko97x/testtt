@@ -35,7 +35,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="bg-[#FDFAEA] w-screen h-screen">
+      <div className="w-screen h-screen">
         {!cameraReady && (
           <div className="w-full h-full flex items-center justify-center">
             <div className="flex items-end">
