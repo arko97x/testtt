@@ -34,7 +34,7 @@ export default function Home() {
 
   return (
     <>
-      {cameraReady && (
+      {!cameraReady && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex items-end">
             <p className="text-black text-xl font-semibold">Setting up the camera</p>
@@ -45,7 +45,7 @@ export default function Home() {
       <div className="relative">
         <video
           ref={videoRef}
-          className={`w-full h-full object-cover transform -scale-x-100 ${!cameraReady ? "" : "hidden"
+          className={`w-full h-full object-cover transform -scale-x-100 ${cameraReady ? "" : "hidden"
             }`}
           autoPlay
           playsInline
