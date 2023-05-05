@@ -37,19 +37,28 @@ export default function Home() {
       {!cameraReady && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex items-end">
-            <p className="text-black text-xl font-semibold">Setting up the camera</p>
+            <p className="text-black text-lg font-medium">Setting up the camera</p>
             <ReactLoading type="bubbles" color="black" height={22} width={24} />
           </div>
         </div>
       )}
-      <div className="relative">
+      <div className="w-full flex items-start justify-center pt-9 md:pt-10">
         <video
           ref={videoRef}
-          className={`w-full h-full object-cover transform -scale-x-100 ${cameraReady ? "" : "hidden"
+          className={`w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-auto object-cover transform -scale-x-100 rounded-3xl border-2 border-transparent p-0.5 ${cameraReady ? "" : "hidden"
             }`}
           autoPlay
           playsInline
         />
+      </div>
+      <div className="w-full text-sm text-center p-4 absolute bottom-0 font-mono">being built by <a
+        className="font-bold underline hover:no-underline text-[#457B9D]" href="https://arccc.co" target="_blank"
+        rel="noopener noreferrer">arko</a>&nbsp;·&nbsp;currently very <span
+          className="inline-block transform -rotate-[18deg] font-bold">b</span><span
+            className="inline-block transform rotate-[16deg] font-bold">u</span><span
+              className="inline-block transform -rotate-[24deg] font-bold">g</span><span
+                className="inline-block transform -rotate-[16deg] font-bold">g</span><span
+                  className="inline-block transform rotate-[16deg] font-bold">y</span>
       </div>
     </>
   )
