@@ -99,7 +99,7 @@ export default function Home() {
     })
     hands.setOptions({
       maxNumHands: 2,
-      modelComplexity: 0,
+      modelComplexity: 1,
       minDetectionConfidence: 0.75,
       minTrackingConfidence: 0.75,
     })
