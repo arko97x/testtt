@@ -7,14 +7,18 @@ import { useRef, useEffect, useState } from "react"
 import ReactLoading from "react-loading"
 import { Vector3 } from "three"
 import * as THREE from "three"
+import * as Tone from "tone"
 
 export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [cameraReady, setCameraReady] = useState(false)
 
+  // Different tones for each hand
+  const toneJSFrequencies = [["G3", "G3", "G3", "G3"], ["F5", "F5", "F5", "F5"]]
+
   // Threshold for pinch gesture (in meters)
-  const pinchDistanceThresh = 0.06
+  const pinchDistanceThresh = 0.08
 
   // Define last positions for each finger of each hand
   const lastPositions = [[new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()], [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()]]
@@ -73,8 +77,13 @@ export default function Home() {
           // Check if distance is below threshold for pinch gesture for each finger
           for (let i = 0; i < distances.length; i++) {
             if (distances[i] < pinchDistanceThresh) {
+              // Create a new synth & trigger a note
+              const synth = new Tone.Synth().toDestination()
+              synth.triggerAttackRelease(toneJSFrequencies[handIdx][i], "8n")
+
               // Adding visual feedback for everytime a note is played
               if (canvasElement) { canvasElement.style.borderColor = "#457B9D" }
+
               lastPositions[handIdx][i] = new Vector3(tips[i].x, tips[i].y)
             }
           }
