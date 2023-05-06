@@ -71,33 +71,8 @@ export default function Home() {
       width: window.innerWidth,
       height: window.innerHeight,
     })
-    // async function startCamera() {
-    //   try {
-    //     await camera.start();
-    //     setCameraReady(true);
-    //   } catch (error) {
-    //     console.error("Failed to start camera:", error);
-    //   }
-    // }
-    // startCamera();
-
-    function startCamera() {
-      return new Promise<void>((resolve, reject) => {
-        camera.start().then(() => {
-          setCameraReady(true);
-          resolve();
-        }).catch(error => {
-          console.error("Failed to start camera:", error);
-          reject(error);
-        });
-      });
-    }
-
-    startCamera().then(() => {
-      // Do something after camera has started
-    }).catch(error => {
-      // Handle error if the camera fails to start
-    });
+    camera.start()
+    if (videoElement) { setCameraReady(true) }
 
     return () => {
       camera.stop()
@@ -120,6 +95,7 @@ export default function Home() {
           <video
             ref={videoRef}
             className="input_video hidden"
+            autoPlay
             playsInline
           />
           <canvas
