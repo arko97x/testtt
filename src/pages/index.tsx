@@ -1,4 +1,6 @@
 import { Camera } from "@mediapipe/camera_utils"
+// import "@mediapipe/control_utils"
+// import "@mediapipe/drawing_utils"
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils"
 import { HAND_CONNECTIONS, Hands } from "@mediapipe/hands"
 import { useRef, useEffect, useState } from "react"
