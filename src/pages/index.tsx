@@ -73,12 +73,12 @@ export default function Home() {
     })
     camera
       .start()
-      // .then(() => {
-      //   setCameraReady(true)
-      // })
-      // .catch((error) => {
-      //   console.error("Failed to start camera:", error)
-      // })
+      .then(() => {
+        setCameraReady(true)
+      })
+      .catch((error) => {
+        console.error("Failed to start camera:", error)
+      })
 
     return () => {
       camera.stop()
@@ -89,19 +89,18 @@ export default function Home() {
   return (
     <>
       <div className="w-screen h-screen bg-white">
-        {/* {!cameraReady && (
+        {!cameraReady && (
           <div className="w-full h-full flex items-center justify-center">
             <div className="flex items-end">
               <p className="text-black text-lg font-medium">Setting up the camera</p>
               <ReactLoading type="bubbles" color="black" height={22} width={24} />
             </div>
           </div>
-        )} */}
+        )}
         <div className="w-full flex items-start justify-center pt-9 md:pt-10">
           <video
             ref={videoRef}
             className="input_video hidden"
-            autoPlay
             playsInline
           />
           <canvas
