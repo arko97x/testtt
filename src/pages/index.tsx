@@ -73,12 +73,12 @@ export default function Home() {
     })
     camera
       .start()
-      .then(() => {
-        setCameraReady(true)
-      })
-      .catch((error) => {
-        console.error("Failed to start camera:", error)
-      })
+      // .then(() => {
+      //   setCameraReady(true)
+      // })
+      // .catch((error) => {
+      //   console.error("Failed to start camera:", error)
+      // })
 
     return () => {
       camera.stop()
@@ -89,14 +89,14 @@ export default function Home() {
   return (
     <>
       <div className="w-screen h-screen bg-white">
-        {!cameraReady && (
+        {/* {!cameraReady && (
           <div className="w-full h-full flex items-center justify-center">
             <div className="flex items-end">
               <p className="text-black text-lg font-medium">Setting up the camera</p>
               <ReactLoading type="bubbles" color="black" height={22} width={24} />
             </div>
           </div>
-        )}
+        )} */}
         <div className="w-full flex items-start justify-center pt-9 md:pt-10">
           <video
             ref={videoRef}
@@ -106,7 +106,7 @@ export default function Home() {
           />
           <canvas
             ref={canvasRef}
-            className={`output_canvas w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-auto object-cover transform -scale-x-100 rounded-3xl border-2 border-transparent p-0.5 ${cameraReady ? "" : "hidden"}`}
+            className={`output_canvas w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-auto object-cover transform -scale-x-100 rounded-3xl border-2 border-transparent p-0.5`}
             width={1280}
             height={720}
           />
