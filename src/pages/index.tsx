@@ -14,6 +14,8 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [cameraReady, setCameraReady] = useState(false)
 
+  Tone.start()
+
   // Different tones for each hand
   const toneJSFrequencies = [["G3", "G3", "G3", "G3"], ["F5", "F5", "F5", "F5"]]
 
@@ -144,7 +146,7 @@ export default function Home() {
           />
           <canvas
             ref={canvasRef}
-            className={`output_canvas w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-[75vh] sm:h-auto object-cover transform -scale-x-100 rounded-3xl border-2 border-transparent p-0.5 ${cameraReady ? "" : "hidden"}`}
+            className={`output_canvas w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-[50vh] sm:h-auto object-cover transform -scale-x-100 rounded-3xl border-2 border-transparent p-0.5 ${cameraReady ? "" : "hidden"}`}
             width={1280}
             height={720}
           />
