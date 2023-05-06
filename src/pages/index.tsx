@@ -90,8 +90,8 @@ export default function Home() {
           <canvas
             ref={canvasRef}
             className={`output_canvas w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-auto object-cover transform -scale-x-100 rounded-3xl border-2 border-transparent p-0.5`}
-            width={640}
-            height={360}
+            width={800}
+            height={450}
           />
         </div>
       </div>
