@@ -5,11 +5,19 @@ import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils"
 import { HAND_CONNECTIONS, Hands } from "@mediapipe/hands"
 import { useRef, useEffect, useState } from "react"
 import ReactLoading from "react-loading"
+import { Vector3 } from "three"
+import * as THREE from "three"
 
 export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [cameraReady, setCameraReady] = useState(false)
+
+  // Threshold for pinch gesture (in meters)
+  const pinchDistanceThresh = 0.06
+
+  // Define last positions for each finger of each hand
+  const lastPositions = [[new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()], [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()]]
 
   useEffect(() => {
     const videoElement = videoRef.current
@@ -38,6 +46,8 @@ export default function Home() {
       )
 
       if (results.multiHandLandmarks) {
+        if (canvasElement) { canvasElement.style.borderColor = "transparent" }
+
         for (let handIdx = 0; handIdx < results.multiHandLandmarks.length; handIdx++) {
           const handLandmarks = results.multiHandLandmarks[handIdx]
           drawConnectors(canvasCtx, handLandmarks, HAND_CONNECTIONS, {
@@ -45,6 +55,29 @@ export default function Home() {
             lineWidth: 10,
           })
           drawLandmarks(canvasCtx, handLandmarks, { color: "#005F73", lineWidth: 2 })
+
+          // Get thumb and finger tip positions
+          const thumbTip = handLandmarks[4] // Thumb
+          const tips = [
+            handLandmarks[8], // Index
+            handLandmarks[12], // Middle
+            handLandmarks[16], // Ring
+            handLandmarks[20], // Pinky
+          ]
+
+          // Calculate distance between thumb tip and the other finger tip landmarks
+          const distances = tips.map((tip) =>
+            Math.sqrt((tip.x - thumbTip.x) ** 2 + (tip.y - thumbTip.y) ** 2 + (tip.z - thumbTip.z) ** 2)
+          )
+
+          // Check if distance is below threshold for pinch gesture for each finger
+          for (let i = 0; i < distances.length; i++) {
+            if (distances[i] < pinchDistanceThresh) {
+              // Adding visual feedback for everytime a note is played
+              if (canvasElement) { canvasElement.style.borderColor = "#457B9D" }
+              lastPositions[handIdx][i] = new Vector3(tips[i].x, tips[i].y)
+            }
+          }
         }
       }
       canvasCtx.restore()
