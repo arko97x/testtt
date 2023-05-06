@@ -71,15 +71,33 @@ export default function Home() {
       width: window.innerWidth,
       height: window.innerHeight,
     })
-    async function startCamera() {
-      try {
-        await camera.start();
-        setCameraReady(true);
-      } catch (error) {
-        console.error("Failed to start camera:", error);
-      }
+    // async function startCamera() {
+    //   try {
+    //     await camera.start();
+    //     setCameraReady(true);
+    //   } catch (error) {
+    //     console.error("Failed to start camera:", error);
+    //   }
+    // }
+    // startCamera();
+
+    function startCamera() {
+      return new Promise<void>((resolve, reject) => {
+        camera.start().then(() => {
+          setCameraReady(true);
+          resolve();
+        }).catch(error => {
+          console.error("Failed to start camera:", error);
+          reject(error);
+        });
+      });
     }
-    startCamera();
+
+    startCamera().then(() => {
+      // Do something after camera has started
+    }).catch(error => {
+      // Handle error if the camera fails to start
+    });
 
     return () => {
       camera.stop()
