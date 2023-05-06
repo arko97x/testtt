@@ -71,14 +71,15 @@ export default function Home() {
       width: window.innerWidth,
       height: window.innerHeight,
     })
-    camera
-      .start()
-      .then(() => {
-        setCameraReady(true)
-      })
-      .catch((error) => {
-        console.error("Failed to start camera:", error)
-      })
+    async function startCamera() {
+      try {
+        await camera.start();
+        setCameraReady(true);
+      } catch (error) {
+        console.error("Failed to start camera:", error);
+      }
+    }
+    startCamera();
 
     return () => {
       camera.stop()
