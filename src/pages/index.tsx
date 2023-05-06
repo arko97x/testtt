@@ -66,8 +66,8 @@ export default function Home() {
       onFrame: async () => {
         await hands.send({ image: videoElement })
       },
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: 1280, // window.innerWidth
+      height: 720, // window.innerHeight
     })
     camera.start()
 
