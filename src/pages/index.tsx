@@ -13,11 +13,12 @@ export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [cameraReady, setCameraReady] = useState(false)
+  var handedness
 
   Tone.start()
 
   // Different tones for each hand
-  const toneJSFrequencies = [["G3", "G3", "G3", "G3"], ["F5", "F5", "F5", "F5"]]
+  const toneJSFrequencies = [[440, 440, 440, 440], [940, 940, 940, 940]]
 
   // Threshold for pinch gesture (in meters)
   const pinchDistanceThresh = 0.08
@@ -56,11 +57,16 @@ export default function Home() {
 
         for (let handIdx = 0; handIdx < results.multiHandLandmarks.length; handIdx++) {
           const handLandmarks = results.multiHandLandmarks[handIdx]
+          handedness = results.multiHandedness[handIdx].label
+
+          // Set the color based on the handedness of the hand - the handedness labels are flipped? Cuz canvas is flipped 180 deg?
+          const color = handedness === "Left" ? "#FF0000" : "#00FF00"
+
           drawConnectors(canvasCtx, handLandmarks, HAND_CONNECTIONS, {
-            color: "#457B9D",
+            color: color,
             lineWidth: 10,
           })
-          drawLandmarks(canvasCtx, handLandmarks, { color: "#005F73", lineWidth: 2 })
+          drawLandmarks(canvasCtx, handLandmarks, { color: color, lineWidth: 2 })
 
           // Get thumb and finger tip positions
           const thumbTip = handLandmarks[4] // Thumb
