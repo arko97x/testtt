@@ -17,6 +17,36 @@ export default function Home() {
 
   Tone.start()
 
+  // synth.triggerAttackRelease(aMinorChordFreqs, "4n")
+
+  // Major chords
+  const cMajorChordFreqs = ["C4", "E4", "G4"]
+  const cSharpMajorChordFreqs = ["C#4", "F4", "G#4"]
+  const dMajorChordFreqs = ["D4", "F#4", "A4"]
+  const dSharpMajorChordFreqs = ["D#4", "G4", "A#4"]
+  const eMajorChordFreqs = ["E4", "G#4", "B4"]
+  const fMajorChordFreqs = ["F4", "A4", "C5"]
+  const fSharpMajorChordFreqs = ["F#4", "A#4", "C#5"]
+  const gMajorChordFreqs = ["G4", "B4", "D5"]
+  const gSharpMajorChordFreqs = ["G#4", "C5", "D#5"]
+  const aMajorChordFreqs = ["A4", "C#5", "E5"]
+  const aSharpMajorChordFreqs = ["A#4", "D5", "F5"]
+  const bMajorChordFreqs = ["B4", "D#5", "F#5"]
+
+  // Minor chords
+  const cMinorChordFreqs = ["C4", "D#4", "G4"]
+  const cSharpMinorChordFreqs = ["C#4", "E4", "G#4"]
+  const dMinorChordFreqs = ["D4", "F4", "A4"]
+  const dSharpMinorChordFreqs = ["D#4", "F#4", "A#4"]
+  const eMinorChordFreqs = ["E4", "G4", "B4"]
+  const fMinorChordFreqs = ["F4", "G#4", "C5"]
+  const fSharpMinorChordFreqs = ["F#4", "A4", "C#5"]
+  const gMinorChordFreqs = ["G4", "A#4", "D5"]
+  const gSharpMinorChordFreqs = ["G#4", "B4", "D#5"]
+  const aMinorChordFreqs = ["A4", "C5", "E5"]
+  const aSharpMinorChordFreqs = ["A#4", "C#5", "F5"]
+  const bMinorChordFreqs = ["B4", "D5", "F#5"]
+
   // Different tones for each hand
   const toneJSFrequencies = [[440, 440, 440, 440], [940, 940, 940, 940]] // [[Left Hand], [Right Hand]]
 
@@ -91,7 +121,7 @@ export default function Home() {
               // Check if finger was previously pinched
               if (!previouslyPinched[handIdx].includes(i)) {
                 // Create a new synth & trigger a note
-                const synth = new Tone.Synth().toDestination()
+                const synth = new Tone.PolySynth().toDestination()
                 if (handedness === "Left") {
                   // If handedness label is Left, it's actually the Right hand
                   synth.triggerAttackRelease(toneJSFrequencies[1][i], "8n")
@@ -178,7 +208,7 @@ export default function Home() {
           />
         </div>
         <div className={`w-full flex items-start justify-center pt-9 md:pt-10 ${cameraReady ? "" : "hidden"}`}>
-        tfelypoc (arccc.co)
+          tfelypoc (arccc.co)
         </div>
       </div>
     </>
