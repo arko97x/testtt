@@ -27,9 +27,9 @@ export default function Home() {
   const lastPositions = [[new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()], [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()]]
 
   useEffect(() => {
-    // Keep track of previously pinched fingers
-    let previouslyPinched: number[] = []
-    
+    // Keep track of previously pinched fingers on both hands
+    let previouslyPinched: [number[], number[]] = [[], []]
+
     const videoElement = videoRef.current
     const canvasElement = canvasRef.current
     function onResults(results: any) {
@@ -89,7 +89,7 @@ export default function Home() {
           for (let i = 0; i < distances.length; i++) {
             if (distances[i] < pinchDistanceThresh) {
               // Check if finger was previously pinched
-              if (!previouslyPinched.includes(i)) {
+              if (!previouslyPinched[handIdx].includes(i)) {
                 // Create a new synth & trigger a note
                 const synth = new Tone.Synth().toDestination()
                 if (handedness === "Left") {
@@ -103,15 +103,15 @@ export default function Home() {
                 // Adding visual feedback for everytime a note is played
                 if (canvasElement) { canvasElement.style.borderColor = "#457B9D" }
 
-                previouslyPinched.push(i)
+                previouslyPinched[handIdx].push(i)
 
                 lastPositions[handIdx][i] = new Vector3(tips[i].x, tips[i].y)
               }
             } else {
               // If finger is not pinched anymore, remove it from the previously pinched array
-              const index = previouslyPinched.indexOf(i)
+              const index = previouslyPinched[handIdx].indexOf(i)
               if (index > -1) {
-                previouslyPinched.splice(index, 1)
+                previouslyPinched[handIdx].splice(index, 1)
               }
             }
           }
