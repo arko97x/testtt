@@ -1,6 +1,4 @@
 import { Camera } from "@mediapipe/camera_utils"
-// import "@mediapipe/control_utils"
-// import "@mediapipe/drawing_utils"
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils"
 import { HAND_CONNECTIONS, Hands } from "@mediapipe/hands"
 import { useRef, useEffect, useState } from "react"
@@ -8,17 +6,9 @@ import ReactLoading from "react-loading"
 import { Vector3 } from "three"
 import * as THREE from "three"
 import * as Tone from "tone"
+import DropdownList from "../components/DropdownList"
 
 export default function Home() {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [cameraReady, setCameraReady] = useState(false)
-  var handedness
-
-  Tone.start()
-
-  // synth.triggerAttackRelease(aMinorChordFreqs, "4n")
-
   // Major chords
   const cMajorChordFreqs = ["C4", "E4", "G4"]
   const cSharpMajorChordFreqs = ["C#4", "F4", "G#4"]
@@ -47,8 +37,62 @@ export default function Home() {
   const aSharpMinorChordFreqs = ["A#4", "C#5", "F5"]
   const bMinorChordFreqs = ["B4", "D5", "F#5"]
 
+  const options = [
+    { "name": "C", "value": cMajorChordFreqs },
+    { "name": "C#", "value": cSharpMajorChordFreqs },
+    { "name": "D", "value": dMajorChordFreqs },
+    { "name": "D#", "value": dSharpMajorChordFreqs },
+    { "name": "E", "value": eMajorChordFreqs },
+    { "name": "F", "value": fMajorChordFreqs },
+    { "name": "F#", "value": fSharpMajorChordFreqs },
+    { "name": "G", "value": gMajorChordFreqs },
+    { "name": "G#", "value": gSharpMajorChordFreqs },
+    { "name": "A", "value": aMajorChordFreqs },
+    { "name": "A#", "value": aSharpMajorChordFreqs },
+    { "name": "B", "value": bMajorChordFreqs },
+    { "name": "Cm", "value": cMinorChordFreqs },
+    { "name": "C#m", "value": cSharpMinorChordFreqs },
+    { "name": "Dm", "value": dMinorChordFreqs },
+    { "name": "D#m", "value": dSharpMinorChordFreqs },
+    { "name": "Em", "value": eMinorChordFreqs },
+    { "name": "Fm", "value": fMinorChordFreqs },
+    { "name": "F#m", "value": fSharpMinorChordFreqs },
+    { "name": "Gm", "value": gMinorChordFreqs },
+    { "name": "G#m", "value": gSharpMinorChordFreqs },
+    { "name": "Am", "value": aMinorChordFreqs },
+    { "name": "A#m", "value": aSharpMinorChordFreqs },
+    { "name": "Bm", "value": bMinorChordFreqs },
+  ]
+  const [selectedLI, setSelectedLI] = useState(options[0].name)
+  const [selectedLM, setSelectedLM] = useState(options[0].name)
+  const [selectedLR, setSelectedLR] = useState(options[0].name)
+  const [selectedLP, setSelectedLP] = useState(options[0].name)
+  const [selectedRI, setSelectedRI] = useState(options[0].name)
+  const [selectedRM, setSelectedRM] = useState(options[0].name)
+  const [selectedRR, setSelectedRR] = useState(options[0].name)
+  const [selectedRP, setSelectedRP] = useState(options[0].name)
+
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [cameraReady, setCameraReady] = useState(false)
+  var handedness
+
+  Tone.start()
+
+  var lif = options.find((option) => option.name === selectedLI)
+  var lmf = options.find((option) => option.name === selectedLM)
+  var lrf = options.find((option) => option.name === selectedLR)
+  var lpf = options.find((option) => option.name === selectedLP)
+  var rif = options.find((option) => option.name === selectedRI)
+  var rmf = options.find((option) => option.name === selectedRM)
+  var rrf = options.find((option) => option.name === selectedRR)
+  var rpf = options.find((option) => option.name === selectedRP)
+
   // Different tones for each hand
-  const toneJSFrequencies = [[440, 440, 440, 440], [940, 940, 940, 940]] // [[Left Hand], [Right Hand]]
+  const toneJSFrequencies = [
+    [lif && lif.value, lmf && lmf.value, lrf && lrf.value, lpf && lpf.value],
+    [rif && rif.value, rmf && rmf.value, rrf && rrf.value, rpf && rpf.value]
+  ] // [[Left Hand], [Right Hand]]
 
   // Threshold for pinch gesture (in meters)
   const pinchDistanceThresh = 0.08
@@ -124,10 +168,10 @@ export default function Home() {
                 const synth = new Tone.PolySynth().toDestination()
                 if (handedness === "Left") {
                   // If handedness label is Left, it's actually the Right hand
-                  synth.triggerAttackRelease(toneJSFrequencies[1][i], "8n")
+                  synth.triggerAttackRelease(toneJSFrequencies[1][i]!, "4n")
                 } else {
                   // If handedness label is Right, it's actually the Left hand
-                  synth.triggerAttackRelease(toneJSFrequencies[0][i], "8n")
+                  synth.triggerAttackRelease(toneJSFrequencies[0][i]!, "4n")
                 }
 
                 // Adding visual feedback for everytime a note is played
@@ -207,8 +251,58 @@ export default function Home() {
             height={720}
           />
         </div>
-        <div className={`w-full flex items-start justify-center pt-9 md:pt-10 ${cameraReady ? "" : "hidden"}`}>
-          tfelypoc (arccc.co)
+        <div className={`w-full px-24 pt-9 md:pt-10 ${cameraReady ? "" : "hidden"}`}>
+          <div className="grid gap-4 grid-cols-2 sm:grid-cols-4 grid-rows-4 sm:grid-rows-2">
+            <DropdownList
+              label="Left Index"
+              options={options.map(o => o.name)}
+              selectedOption={selectedLI}
+              setSelectedOption={setSelectedLI}
+            />
+            <DropdownList
+              label="Left Middle"
+              options={options.map(o => o.name)}
+              selectedOption={selectedLM}
+              setSelectedOption={setSelectedLM}
+            />
+            <DropdownList
+              label="Left Ring"
+              options={options.map(o => o.name)}
+              selectedOption={selectedLR}
+              setSelectedOption={setSelectedLR}
+            />
+            <DropdownList
+              label="Left Pinky"
+              options={options.map(o => o.name)}
+              selectedOption={selectedLP}
+              setSelectedOption={setSelectedLP}
+            />
+
+            <DropdownList
+              label="Right Index"
+              options={options.map(o => o.name)}
+              selectedOption={selectedRI}
+              setSelectedOption={setSelectedRI}
+            />
+            <DropdownList
+              label="Right Middle"
+              options={options.map(o => o.name)}
+              selectedOption={selectedRM}
+              setSelectedOption={setSelectedRM}
+            />
+            <DropdownList
+              label="Right Ring"
+              options={options.map(o => o.name)}
+              selectedOption={selectedRR}
+              setSelectedOption={setSelectedRR}
+            />
+            <DropdownList
+              label="Right Pinky"
+              options={options.map(o => o.name)}
+              selectedOption={selectedRP}
+              setSelectedOption={setSelectedRP}
+            />
+          </div>
         </div>
       </div>
     </>
