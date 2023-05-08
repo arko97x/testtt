@@ -18,7 +18,7 @@ export default function Home() {
   Tone.start()
 
   // Different tones for each hand
-  const toneJSFrequencies = [[440, 440, 440, 440], [940, 940, 940, 940]]
+  const toneJSFrequencies = [[440, 440, 440, 440], [940, 940, 940, 940]] // [[Left Hand], [Right Hand]]
 
   // Threshold for pinch gesture (in meters)
   const pinchDistanceThresh = 0.08
@@ -87,7 +87,13 @@ export default function Home() {
             if (distances[i] < pinchDistanceThresh) {
               // Create a new synth & trigger a note
               const synth = new Tone.Synth().toDestination()
-              synth.triggerAttackRelease(toneJSFrequencies[handIdx][i], "8n")
+              if (handedness === "Left") {
+                // If handedness label is Left, it's actually the Right hand
+                synth.triggerAttackRelease(toneJSFrequencies[1][i], "8n")
+              } else {
+                // If handedness label is Right, it's actually the Left hand
+                synth.triggerAttackRelease(toneJSFrequencies[0][i], "8n")
+              }
 
               // Adding visual feedback for everytime a note is played
               if (canvasElement) { canvasElement.style.borderColor = "#457B9D" }
