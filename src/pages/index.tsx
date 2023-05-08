@@ -27,6 +27,9 @@ export default function Home() {
   const lastPositions = [[new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()], [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()]]
 
   useEffect(() => {
+    // Keep track of previously pinched fingers
+    let previouslyPinched: number[] = []
+    
     const videoElement = videoRef.current
     const canvasElement = canvasRef.current
     function onResults(results: any) {
@@ -85,20 +88,31 @@ export default function Home() {
           // Check if distance is below threshold for pinch gesture for each finger
           for (let i = 0; i < distances.length; i++) {
             if (distances[i] < pinchDistanceThresh) {
-              // Create a new synth & trigger a note
-              const synth = new Tone.Synth().toDestination()
-              if (handedness === "Left") {
-                // If handedness label is Left, it's actually the Right hand
-                synth.triggerAttackRelease(toneJSFrequencies[1][i], "8n")
-              } else {
-                // If handedness label is Right, it's actually the Left hand
-                synth.triggerAttackRelease(toneJSFrequencies[0][i], "8n")
+              // Check if finger was previously pinched
+              if (!previouslyPinched.includes(i)) {
+                // Create a new synth & trigger a note
+                const synth = new Tone.Synth().toDestination()
+                if (handedness === "Left") {
+                  // If handedness label is Left, it's actually the Right hand
+                  synth.triggerAttackRelease(toneJSFrequencies[1][i], "8n")
+                } else {
+                  // If handedness label is Right, it's actually the Left hand
+                  synth.triggerAttackRelease(toneJSFrequencies[0][i], "8n")
+                }
+
+                // Adding visual feedback for everytime a note is played
+                if (canvasElement) { canvasElement.style.borderColor = "#457B9D" }
+
+                previouslyPinched.push(i)
+
+                lastPositions[handIdx][i] = new Vector3(tips[i].x, tips[i].y)
               }
-
-              // Adding visual feedback for everytime a note is played
-              if (canvasElement) { canvasElement.style.borderColor = "#457B9D" }
-
-              lastPositions[handIdx][i] = new Vector3(tips[i].x, tips[i].y)
+            } else {
+              // If finger is not pinched anymore, remove it from the previously pinched array
+              const index = previouslyPinched.indexOf(i)
+              if (index > -1) {
+                previouslyPinched.splice(index, 1)
+              }
             }
           }
         }
