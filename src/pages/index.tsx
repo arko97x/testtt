@@ -163,7 +163,7 @@ export default function Home() {
             </div>
           </div>
         )}
-        <div className="w-full h-screen flex items-start justify-center pt-9 md:pt-10">
+        <div className={`w-full flex items-start justify-center pt-9 md:pt-10 ${cameraReady ? "" : "hidden"}`}>
           <video
             ref={videoRef}
             className="input_video hidden"
@@ -172,10 +172,13 @@ export default function Home() {
           />
           <canvas
             ref={canvasRef}
-            className={`output_canvas w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-[50vh] sm:h-auto object-cover transform -scale-x-100 rounded-3xl border-2 border-transparent p-0.5 ${cameraReady ? "" : "hidden"}`}
+            className={`output_canvas w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-[50vh] sm:h-auto object-cover transform -scale-x-100 rounded-3xl border-2 border-transparent p-0.5`}
             width={1280}
             height={720}
           />
+        </div>
+        <div className={`w-full flex items-start justify-center pt-9 md:pt-10 ${cameraReady ? "" : "hidden"}`}>
+        tfelypoc (arccc.co)
         </div>
       </div>
     </>
