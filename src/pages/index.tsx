@@ -6,7 +6,7 @@ import ReactLoading from "react-loading"
 import { Vector3 } from "three"
 import * as THREE from "three"
 import * as Tone from "tone"
-import DropdownList from "../components/DropdownList"
+import BottomSheet from "../components/BottomSheet"
 
 export default function Home() {
   // Major chords
@@ -38,30 +38,30 @@ export default function Home() {
   const bMinorChordFreqs = ["B4", "D5", "F#5"]
 
   const options = [
-    { "name": "C", "value": cMajorChordFreqs },
-    { "name": "C#", "value": cSharpMajorChordFreqs },
-    { "name": "D", "value": dMajorChordFreqs },
-    { "name": "D#", "value": dSharpMajorChordFreqs },
-    { "name": "E", "value": eMajorChordFreqs },
-    { "name": "F", "value": fMajorChordFreqs },
-    { "name": "F#", "value": fSharpMajorChordFreqs },
-    { "name": "G", "value": gMajorChordFreqs },
-    { "name": "G#", "value": gSharpMajorChordFreqs },
     { "name": "A", "value": aMajorChordFreqs },
-    { "name": "A#", "value": aSharpMajorChordFreqs },
-    { "name": "B", "value": bMajorChordFreqs },
-    { "name": "Cm", "value": cMinorChordFreqs },
-    { "name": "C#m", "value": cSharpMinorChordFreqs },
-    { "name": "Dm", "value": dMinorChordFreqs },
-    { "name": "D#m", "value": dSharpMinorChordFreqs },
-    { "name": "Em", "value": eMinorChordFreqs },
-    { "name": "Fm", "value": fMinorChordFreqs },
-    { "name": "F#m", "value": fSharpMinorChordFreqs },
-    { "name": "Gm", "value": gMinorChordFreqs },
-    { "name": "G#m", "value": gSharpMinorChordFreqs },
     { "name": "Am", "value": aMinorChordFreqs },
+    { "name": "A#", "value": aSharpMajorChordFreqs },
     { "name": "A#m", "value": aSharpMinorChordFreqs },
+    { "name": "B", "value": bMajorChordFreqs },
     { "name": "Bm", "value": bMinorChordFreqs },
+    { "name": "C", "value": cMajorChordFreqs },
+    { "name": "Cm", "value": cMinorChordFreqs },
+    { "name": "C#", "value": cSharpMajorChordFreqs },
+    { "name": "C#m", "value": cSharpMinorChordFreqs },
+    { "name": "D", "value": dMajorChordFreqs },
+    { "name": "Dm", "value": dMinorChordFreqs },
+    { "name": "D#", "value": dSharpMajorChordFreqs },
+    { "name": "D#m", "value": dSharpMinorChordFreqs },
+    { "name": "E", "value": eMajorChordFreqs },
+    { "name": "Em", "value": eMinorChordFreqs },
+    { "name": "F", "value": fMajorChordFreqs },
+    { "name": "Fm", "value": fMinorChordFreqs },
+    { "name": "F#", "value": fSharpMajorChordFreqs },
+    { "name": "F#m", "value": fSharpMinorChordFreqs },
+    { "name": "G", "value": gMajorChordFreqs },
+    { "name": "Gm", "value": gMinorChordFreqs },
+    { "name": "G#", "value": gSharpMajorChordFreqs },
+    { "name": "G#m", "value": gSharpMinorChordFreqs },
   ]
   const [selectedLI, setSelectedLI] = useState(options[0].name)
   const [selectedLM, setSelectedLM] = useState(options[0].name)
@@ -251,57 +251,67 @@ export default function Home() {
             height={720}
           />
         </div>
-        <div className={`w-full px-24 pt-9 md:pt-10 ${cameraReady ? "" : "hidden"}`}>
-          <div className="grid gap-4 grid-cols-2 sm:grid-cols-4 grid-rows-4 sm:grid-rows-2">
-            <DropdownList
-              label="Left Index"
-              options={options.map(o => o.name)}
-              selectedOption={selectedLI}
-              setSelectedOption={setSelectedLI}
-            />
-            <DropdownList
-              label="Left Middle"
-              options={options.map(o => o.name)}
-              selectedOption={selectedLM}
-              setSelectedOption={setSelectedLM}
-            />
-            <DropdownList
-              label="Left Ring"
-              options={options.map(o => o.name)}
-              selectedOption={selectedLR}
-              setSelectedOption={setSelectedLR}
-            />
-            <DropdownList
-              label="Left Pinky"
-              options={options.map(o => o.name)}
-              selectedOption={selectedLP}
-              setSelectedOption={setSelectedLP}
-            />
+        <div className={`w-full px-8 sm:px-10 md:px-24 pt-9 md:pt-10 ${cameraReady ? "" : "hidden"} flex justify-center`}>
+          <div className="grid gap-6 grid-rows-2 sm:grid-cols-2">
+            <div className="relative flex flex-col space-y-1 border border-gray-300 rounded-md p-4">
+              <p className="absolute -top-[0.9rem] -left-[0.38rem] text-sm text-gray-700 font-mono bg-white px-1 py-1">LEFT HAND CHORDS</p>
+              <div className="grid gap-4 grid-cols-4">
+                <BottomSheet
+                  label="INDEX"
+                  options={options.map(o => o.name)}
+                  selectedOption={selectedLI}
+                  setSelectedOption={setSelectedLI}
+                />
+                <BottomSheet
+                  label="MIDDLE"
+                  options={options.map(o => o.name)}
+                  selectedOption={selectedLM}
+                  setSelectedOption={setSelectedLM}
+                />
+                <BottomSheet
+                  label="RING"
+                  options={options.map(o => o.name)}
+                  selectedOption={selectedLR}
+                  setSelectedOption={setSelectedLR}
+                />
+                <BottomSheet
+                  label="PINKY"
+                  options={options.map(o => o.name)}
+                  selectedOption={selectedLP}
+                  setSelectedOption={setSelectedLP}
+                />
+              </div>
+            </div>
 
-            <DropdownList
-              label="Right Index"
-              options={options.map(o => o.name)}
-              selectedOption={selectedRI}
-              setSelectedOption={setSelectedRI}
-            />
-            <DropdownList
-              label="Right Middle"
-              options={options.map(o => o.name)}
-              selectedOption={selectedRM}
-              setSelectedOption={setSelectedRM}
-            />
-            <DropdownList
-              label="Right Ring"
-              options={options.map(o => o.name)}
-              selectedOption={selectedRR}
-              setSelectedOption={setSelectedRR}
-            />
-            <DropdownList
-              label="Right Pinky"
-              options={options.map(o => o.name)}
-              selectedOption={selectedRP}
-              setSelectedOption={setSelectedRP}
-            />
+            <div className="relative flex flex-col space-y-1 border border-gray-300 rounded-md p-4">
+              <p className="absolute -top-[0.9rem] -left-[0.38rem] text-sm text-gray-700 font-mono bg-white px-1 py-1">RIGHT HAND CHORDS</p>
+              <div className="grid gap-4 grid-cols-4">
+                <BottomSheet
+                  label="INDEX"
+                  options={options.map(o => o.name)}
+                  selectedOption={selectedRI}
+                  setSelectedOption={setSelectedRI}
+                />
+                <BottomSheet
+                  label="MIDDLE"
+                  options={options.map(o => o.name)}
+                  selectedOption={selectedRM}
+                  setSelectedOption={setSelectedRM}
+                />
+                <BottomSheet
+                  label="RING"
+                  options={options.map(o => o.name)}
+                  selectedOption={selectedRR}
+                  setSelectedOption={setSelectedRR}
+                />
+                <BottomSheet
+                  label="PINKY"
+                  options={options.map(o => o.name)}
+                  selectedOption={selectedRP}
+                  setSelectedOption={setSelectedRP}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
