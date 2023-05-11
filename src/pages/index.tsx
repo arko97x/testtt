@@ -176,9 +176,10 @@ export default function NewHome() {
     })
     camera.start()
     if (videoElement) {
-      navigator.mediaDevices.getUserMedia({ video: true }).then(() => {
-        setCameraReady(true)
-      })
+      setCameraReady(true)
+      // navigator.mediaDevices.getUserMedia({ video: true }).then(() => {
+      //   setCameraReady(true)
+      // })
     }
 
     return () => {
