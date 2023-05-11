@@ -202,7 +202,7 @@ export default function NewHome() {
             playsInline
           />
           <div className="relative">
-            <button className={`absolute top-4 right-4 z-40 px-4 py-2 font-mono text-xs border-2 ${isRunning ? "bg-red-600 hover:bg-black text-white border-white" : "bg-green-600 hover:bg-black text-white"} rounded-3xl`} onClick={handleToggle}>{isRunning ? 'PAUSE' : 'PLAY'}</button>
+            <button className={`absolute top-4 right-4 z-40 px-4 py-2 font-mono text-xs border-2 ${isRunning ? "bg-black hover:bg-white text-white hover:text-black border-white" : "bg-white hover:bg-black text-black hover:text-white"} rounded-3xl`} onClick={handleToggle}>{isRunning ? 'PAUSE' : 'PLAY'}</button>
             <div className={`absolute top-[45%] right-[42%] z-40 ${isRunning ? "hidden" : "block"} text-white`}>Camera paused</div>
             <canvas
               ref={canvasRef}
