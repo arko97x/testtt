@@ -9,7 +9,7 @@ import * as Tone from "tone"
 import BottomSheet from "../components/BottomSheet"
 import options from "../components/ChordFrequencies"
 
-export default function Home() {
+export default function NewHome() {
   const [selectedLI, setSelectedLI] = useState(options[0].name)
   const [selectedLM, setSelectedLM] = useState(options[0].name)
   const [selectedLR, setSelectedLR] = useState(options[0].name)
@@ -23,6 +23,11 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [cameraReady, setCameraReady] = useState(false)
   var handedness
+
+  const [isRunning, setIsRunning] = useState(true)
+  function handleToggle() {
+    setIsRunning(!isRunning)
+  }
 
   Tone.start()
 
@@ -53,6 +58,7 @@ export default function Home() {
 
     const videoElement = videoRef.current
     const canvasElement = canvasRef.current
+
     function onResults(results: any) {
       if (!videoElement) {
         return
@@ -76,67 +82,71 @@ export default function Home() {
         canvasElement.height
       )
 
-      if (results.multiHandLandmarks) {
-        if (canvasElement) { canvasElement.style.borderColor = "transparent" }
+      if (isRunning) {
+        if (results.multiHandLandmarks) {
+          if (canvasElement) { canvasElement.style.borderColor = "transparent" }
 
-        for (let handIdx = 0; handIdx < results.multiHandLandmarks.length; handIdx++) {
-          const handLandmarks = results.multiHandLandmarks[handIdx]
-          handedness = results.multiHandedness[handIdx].label
+          for (let handIdx = 0; handIdx < results.multiHandLandmarks.length; handIdx++) {
+            const handLandmarks = results.multiHandLandmarks[handIdx]
+            handedness = results.multiHandedness[handIdx].label
 
-          // Set the color based on the handedness of the hand - the handedness labels are flipped? Cuz canvas is flipped 180 deg?
-          const color = handedness === "Left" ? "#FF0000" : "#00FF00"
+            // Set the color based on the handedness of the hand - the handedness labels are flipped? Cuz canvas is flipped 180 deg?
+            const color = handedness === "Left" ? "#FF0000" : "#00FF00"
 
-          drawConnectors(canvasCtx, handLandmarks, HAND_CONNECTIONS, {
-            color: color,
-            lineWidth: 10,
-          })
-          drawLandmarks(canvasCtx, handLandmarks, { color: color, lineWidth: 2 })
+            drawConnectors(canvasCtx, handLandmarks, HAND_CONNECTIONS, {
+              color: color,
+              lineWidth: 10,
+            })
+            drawLandmarks(canvasCtx, handLandmarks, { color: color, lineWidth: 2 })
 
-          // Get thumb and finger tip positions
-          const thumbTip = handLandmarks[4] // Thumb
-          const tips = [
-            handLandmarks[8], // Index
-            handLandmarks[12], // Middle
-            handLandmarks[16], // Ring
-            handLandmarks[20], // Pinky
-          ]
+            // Get thumb and finger tip positions
+            const thumbTip = handLandmarks[4] // Thumb
+            const tips = [
+              handLandmarks[8], // Index
+              handLandmarks[12], // Middle
+              handLandmarks[16], // Ring
+              handLandmarks[20], // Pinky
+            ]
 
-          // Calculate distance between thumb tip and the other finger tip landmarks
-          const distances = tips.map((tip) =>
-            Math.sqrt((tip.x - thumbTip.x) ** 2 + (tip.y - thumbTip.y) ** 2 + (tip.z - thumbTip.z) ** 2)
-          )
+            // Calculate distance between thumb tip and the other finger tip landmarks
+            const distances = tips.map((tip) =>
+              Math.sqrt((tip.x - thumbTip.x) ** 2 + (tip.y - thumbTip.y) ** 2 + (tip.z - thumbTip.z) ** 2)
+            )
 
-          // Check if distance is below threshold for pinch gesture for each finger
-          for (let i = 0; i < distances.length; i++) {
-            if (distances[i] < pinchDistanceThresh) {
-              // Check if finger was previously pinched
-              if (!previouslyPinched[handIdx].includes(i)) {
-                // Create a new synth & trigger a note
-                const synth = new Tone.PolySynth().toDestination()
-                if (handedness === "Left") {
-                  // If handedness label is Left, it's actually the Right hand
-                  synth.triggerAttackRelease(toneJSFrequencies[1][i]!, "4n")
-                } else {
-                  // If handedness label is Right, it's actually the Left hand
-                  synth.triggerAttackRelease(toneJSFrequencies[0][i]!, "4n")
+            // Check if distance is below threshold for pinch gesture for each finger
+            for (let i = 0; i < distances.length; i++) {
+              if (distances[i] < pinchDistanceThresh) {
+                // Check if finger was previously pinched
+                if (!previouslyPinched[handIdx].includes(i)) {
+                  // Create a new synth & trigger a note
+                  const synth = new Tone.PolySynth().toDestination()
+                  if (handedness === "Left") {
+                    // If handedness label is Left, it's actually the Right hand
+                    synth.triggerAttackRelease(toneJSFrequencies[1][i]!, "4n")
+                  } else {
+                    // If handedness label is Right, it's actually the Left hand
+                    synth.triggerAttackRelease(toneJSFrequencies[0][i]!, "4n")
+                  }
+
+                  // Adding visual feedback for everytime a note is played
+                  if (canvasElement) { canvasElement.style.borderColor = "#457B9D" }
+
+                  previouslyPinched[handIdx].push(i)
+
+                  lastPositions[handIdx][i] = new Vector3(tips[i].x, tips[i].y)
                 }
-
-                // Adding visual feedback for everytime a note is played
-                if (canvasElement) { canvasElement.style.borderColor = "#457B9D" }
-
-                previouslyPinched[handIdx].push(i)
-
-                lastPositions[handIdx][i] = new Vector3(tips[i].x, tips[i].y)
-              }
-            } else {
-              // If finger is not pinched anymore, remove it from the previously pinched array
-              const index = previouslyPinched[handIdx].indexOf(i)
-              if (index > -1) {
-                previouslyPinched[handIdx].splice(index, 1)
+              } else {
+                // If finger is not pinched anymore, remove it from the previously pinched array
+                const index = previouslyPinched[handIdx].indexOf(i)
+                if (index > -1) {
+                  previouslyPinched[handIdx].splice(index, 1)
+                }
               }
             }
           }
         }
+      } else {
+        camera.stop()
       }
       canvasCtx.restore()
     }
@@ -191,12 +201,16 @@ export default function Home() {
             autoPlay
             playsInline
           />
-          <canvas
-            ref={canvasRef}
-            className={`output_canvas w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-[50vh] sm:h-auto object-cover transform -scale-x-100 rounded-3xl border-2 border-transparent p-0.5`}
-            width={1280}
-            height={720}
-          />
+          <div className="relative">
+            <button className={`absolute top-4 right-4 z-40 px-4 py-2 font-mono text-xs border-2 ${isRunning ? "bg-red-600 hover:bg-black text-white border-white" : "bg-green-600 hover:bg-black text-white"} rounded-3xl`} onClick={handleToggle}>{isRunning ? 'PAUSE' : 'PLAY'}</button>
+            <div className={`absolute top-[45%] right-[42%] z-40 ${isRunning ? "hidden" : "block"} text-white`}>Camera paused</div>
+            <canvas
+              ref={canvasRef}
+              className={`output_canvas w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-[50vh] sm:h-auto object-cover transform -scale-x-100 rounded-3xl border-2 border-transparent p-0.5`}
+              width={1280}
+              height={720}
+            />
+          </div>
         </div>
         <div className={`w-full px-8 sm:px-10 md:px-24 pt-9 md:pt-10 ${cameraReady ? "" : "hidden"} flex justify-center`}>
           <div className="grid gap-6 grid-rows-2 sm:grid-cols-2">
