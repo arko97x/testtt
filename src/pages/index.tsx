@@ -175,7 +175,11 @@ export default function NewHome() {
       height: window.innerHeight,
     })
     camera.start()
-    if (videoElement) { setCameraReady(true) }
+    if (videoElement) {
+      navigator.mediaDevices.getUserMedia({ video: true }).then(() => {
+        setCameraReady(true)
+      })
+    }
 
     return () => {
       camera.stop()
