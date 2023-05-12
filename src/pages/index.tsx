@@ -120,13 +120,7 @@ export default function NewHome() {
                 if (!previouslyPinched[handIdx].includes(i)) {
                   // Create a new synth & trigger a note
                   const synth = new Tone.PolySynth().toDestination()
-                  if (handedness === "Left") {
-                    // If handedness label is Left, it's actually the Right hand
-                    synth.triggerAttackRelease(toneJSFrequencies[1][i]!, "4n")
-                  } else {
-                    // If handedness label is Right, it's actually the Left hand
-                    synth.triggerAttackRelease(toneJSFrequencies[0][i]!, "4n")
-                  }
+                  synth.triggerAttackRelease(toneJSFrequencies[handedness === "Left" ? 1 : 0][i]!, "8n") // If handedness label is Left, it's actually the Right hand and vice versa
 
                   // Adding visual feedback for everytime a note is played
                   if (canvasElement) { canvasElement.style.borderColor = "#457B9D" }
