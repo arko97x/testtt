@@ -1,13 +1,19 @@
 import { Camera } from "@mediapipe/camera_utils"
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils"
 import { HAND_CONNECTIONS, Hands } from "@mediapipe/hands"
-import { useRef, useEffect, useState } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import ReactLoading from "react-loading"
 import { Vector3 } from "three"
 import * as THREE from "three"
 import * as Tone from "tone"
 import BottomSheet from "../components/BottomSheet"
 import options from "../components/ChordFrequencies"
+
+import dynamic from 'next/dynamic'
+const Sketch = dynamic(() => import('../components/mySketch'), {
+  ssr: false
+})
+
 
 export default function NewHome() {
   const [selectedLI, setSelectedLI] = useState(options[0].name)
@@ -18,6 +24,8 @@ export default function NewHome() {
   const [selectedRM, setSelectedRM] = useState(options[0].name)
   const [selectedRR, setSelectedRR] = useState(options[0].name)
   const [selectedRP, setSelectedRP] = useState(options[0].name)
+
+  const data = {}
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -273,6 +281,9 @@ export default function NewHome() {
               </div>
             </div>
           </div>
+        </div>
+        <div className="flex justify-center">
+          <Sketch data={data} />
         </div>
       </div>
     </>
