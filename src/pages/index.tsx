@@ -16,14 +16,14 @@ const Sketch = dynamic(() => import('../components/mySketch'), {
 
 
 export default function NewHome() {
-  const [selectedLI, setSelectedLI] = useState(options[0].name)
-  const [selectedLM, setSelectedLM] = useState(options[0].name)
-  const [selectedLR, setSelectedLR] = useState(options[0].name)
-  const [selectedLP, setSelectedLP] = useState(options[0].name)
-  const [selectedRI, setSelectedRI] = useState(options[0].name)
-  const [selectedRM, setSelectedRM] = useState(options[0].name)
-  const [selectedRR, setSelectedRR] = useState(options[0].name)
-  const [selectedRP, setSelectedRP] = useState(options[0].name)
+  const [selectedLI, setSelectedLI] = useState(options[6].name)
+  const [selectedLM, setSelectedLM] = useState(options[11].name)
+  const [selectedLR, setSelectedLR] = useState(options[15].name)
+  const [selectedLP, setSelectedLP] = useState(options[16].name)
+  const [selectedRI, setSelectedRI] = useState(options[20].name)
+  const [selectedRM, setSelectedRM] = useState(options[12].name)
+  const [selectedRR, setSelectedRR] = useState(options[18].name)
+  const [selectedRP, setSelectedRP] = useState(options[4].name)
 
   const data = {}
 
