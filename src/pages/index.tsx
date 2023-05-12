@@ -55,7 +55,7 @@ export default function NewHome() {
   ] // [[Left Hand], [Right Hand]]
 
   // Threshold for pinch gesture (in meters)
-  const pinchDistanceThresh = 0.08
+  const pinchDistanceThresh = 0.049
 
   // Define last positions for each finger of each hand
   const lastPositions = [[new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()], [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()]]
@@ -213,7 +213,7 @@ export default function NewHome() {
             <div style={{ transform: "translate(-50%, -50%)" }} className={`absolute top-1/2 left-1/2 z-40 ${isRunning ? "hidden" : "block"} text-white`}>Camera paused</div>
             <canvas
               ref={canvasRef}
-              className={`output_canvas w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-[50vh] sm:h-auto object-cover transform -scale-x-100 rounded-3xl border-2 border-transparent p-0.5`}
+              className={`output_canvas w-[80vw] md:w-[60vw] lg:w-[50vw] xl:w-[50vw] h-[50vh] sm:h-auto object-cover transform -scale-x-100 rounded-3xl border-2 ${cameraReady ? "border-transparent" : "border-gray-300"} p-0.5`}
               width={1280}
               height={720}
             />

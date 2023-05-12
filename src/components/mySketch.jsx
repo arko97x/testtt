@@ -15,7 +15,7 @@ const Sketch = ({ data }) => {
                 p.background(0)
                 p.fill(255)
                 p.ellipse(p.width / 2, p.height / 2, 50, 50)
-                console.log(data)
+                // console.log(data)
             }
         })
 
