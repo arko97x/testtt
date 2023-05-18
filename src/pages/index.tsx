@@ -37,7 +37,7 @@ export default function NewHome() {
     setIsRunning(!isRunning)
   }
 
-  Tone.start()
+  // Tone.start()
 
   var lif = options.find((option) => option.name === selectedLI)
   var lmf = options.find((option) => option.name === selectedLM)
@@ -63,6 +63,8 @@ export default function NewHome() {
   useEffect(() => {
     // Keep track of previously pinched fingers on both hands
     let previouslyPinched: [number[], number[]] = [[], []]
+
+    const synth = new Tone.PolySynth().toDestination()
 
     const videoElement = videoRef.current
     const canvasElement = canvasRef.current
@@ -126,8 +128,7 @@ export default function NewHome() {
               if (distances[i] < pinchDistanceThresh) {
                 // Check if finger was previously pinched
                 if (!previouslyPinched[handIdx].includes(i)) {
-                  // Create a new synth & trigger a note
-                  const synth = new Tone.PolySynth().toDestination()
+                  // Trigger a note
                   synth.triggerAttackRelease(toneJSFrequencies[handedness === "Left" ? 1 : 0][i]!, "8n") // If handedness label is Left, it's actually the Right hand and vice versa
 
                   // Adding visual feedback for everytime a note is played
