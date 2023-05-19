@@ -37,8 +37,6 @@ export default function NewHome() {
     setIsRunning(!isRunning)
   }
 
-  // Tone.start()
-
   var lif = options.find((option) => option.name === selectedLI)
   var lmf = options.find((option) => option.name === selectedLM)
   var lrf = options.find((option) => option.name === selectedLR)
@@ -180,9 +178,6 @@ export default function NewHome() {
     camera.start()
     if (videoElement) {
       setCameraReady(true)
-      // navigator.mediaDevices.getUserMedia({ video: true }).then(() => {
-      //   setCameraReady(true)
-      // })
     }
 
     return () => {
