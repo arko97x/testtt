@@ -1,4 +1,4 @@
-Code for a prospective gestural interface for artists & performers.
+The repository you're currently viewing might be archived in the near future. The documentation has moved to **https://github.com/arko97x/movzart**.
 
-## Current Stack
-Next.js, TailwindCSS, MediaPipe, and Tone.js among other things. The project is still being tested and worked upon as you read this. 
+Best,
+Arko
